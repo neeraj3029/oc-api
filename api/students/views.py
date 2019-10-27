@@ -24,3 +24,22 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND    
             )
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            required_user = self.queryset.get(pk=kwargs["pk"])
+            required_user.delete()
+            return Response(
+                data={
+                    "message": "User Deleted"
+                },
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except User.DoesNotExist:
+            return Response(
+                data={
+                    "message": "User with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+            

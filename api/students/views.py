@@ -1,45 +1,19 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
-from .models import User
-from .serializers import UserSerializer
+from .models import User, Complaint
+from .serializers import UserSerializer, ComplaintSerializer
 
 # Create your views here.
-
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
-    def get(self, request, *args, **kwargs):
-        try:
-            required_user = self.queryset.get(pk=kwargs["pk"])
-            return Response(UserSerializer(required_user).data)
-        except User.DoesNotExist:
-            return Response(
-                data={
-                    "message": "User with id: {} does not exist".format(kwargs["pk"])
-                },
-                status=status.HTTP_404_NOT_FOUND    
-            )
+class ComplaintView(viewsets.ModelViewSet):
+    queryset = Complaint.objects.all()
+    serializer_class = ComplaintSerializer
 
-    def delete(self, request, *args, **kwargs):
-        try:
-            required_user = self.queryset.get(pk=kwargs["pk"])
-            required_user.delete()
-            return Response(
-                data={
-                    "message": "User Deleted"
-                },
-                status=status.HTTP_204_NO_CONTENT
-            )
-        except User.DoesNotExist:
-            return Response(
-                data={
-                    "message": "User with id: {} does not exist".format(kwargs["pk"])
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-            
+
+    
+    
+
